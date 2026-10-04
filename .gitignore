@@ -1,0 +1,5 @@
+keys.txt
+*.agekey
+*.dec.yaml
+*.plain.yaml
+.DS_Store

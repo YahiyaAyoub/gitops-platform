@@ -1,0 +1,4 @@
+creation_rules:
+  - path_regex: .*\.enc\.ya?ml$
+    encrypted_regex: ^(data|stringData)$
+    age: age18fd0sxteh5ddq0xhmdew42qxlzx7ylmuchsqs0xvdd0twazh745sxh65gy
