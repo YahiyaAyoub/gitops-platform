@@ -1,0 +1,34 @@
+# Platform add-on on every target cluster
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: keda
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  generators:
+    - clusters:
+        selector:
+          matchExpressions:
+            - { key: env, operator: In, values: [dev, prod] }
+  template:
+    metadata:
+      name: 'keda-{{ .name }}'
+    spec:
+      project: default
+      source:
+        repoURL: https://kedacore.github.io/charts
+        chart: keda
+        targetRevision: 2.21.0
+        helm:
+          releaseName: keda
+      destination:
+        name: '{{ .name }}'
+        namespace: keda
+      syncPolicy:
+        automated: { prune: true, selfHeal: true }
+        syncOptions: [CreateNamespace=true, ServerSideApply=true]   # KEDA CRDs exceed client-side annotation limit
+        retry: { limit: 5, backoff: { duration: 10s, factor: 2, maxDuration: 3m } }
