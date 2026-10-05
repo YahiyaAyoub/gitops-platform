@@ -1,0 +1,9 @@
+#!/bin/sh
+# 1) any *.enc.yaml being committed MUST be SOPS-encrypted
+for f in $(git diff --cached --name-only --diff-filter=ACM | grep -E '\.enc\.ya?ml$'); do
+  if ! grep -q '^sops:' "$f" || ! grep -q 'ENC\[' "$f"; then
+    echo "BLOCKED: $f is not SOPS-encrypted"; exit 1
+  fi
+done
+# 2) generic secret scan of staged changes
+exec gitleaks git --pre-commit --staged --redact -v

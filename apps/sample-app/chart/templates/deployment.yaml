@@ -1,3 +1,4 @@
+{{- $hasSecret := .Files.Get (printf "secrets/%s.enc.yaml" .Values.env) }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -23,6 +24,11 @@ spec:
               value: {{ .Values.ui.color | quote }}
             - name: FEATURE_NEW_BANNER
               value: {{ .Values.features.newBanner | quote }}
+            {{- if $hasSecret }}
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: sample-app-db, key: DB_PASSWORD }
+            {{- end }}
           readinessProbe: { httpGet: { path: /readyz, port: http } }
           livenessProbe:  { httpGet: { path: /healthz, port: http } }
           resources: {{- toYaml .Values.resources | nindent 12 }}
