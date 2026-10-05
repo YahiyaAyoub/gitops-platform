@@ -1,0 +1,8 @@
+# Argo CD on the hub cluster (installed via OSS Helm chart)
+configs:
+  params:
+    server.insecure: true          # TLS terminated by port-forward in this lab
+  cm:
+    timeout.reconciliation: 60s    # faster drift detection for demos (default 180s)
+dex:
+  enabled: false
