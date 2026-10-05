@@ -1,0 +1,11 @@
+argocd app get sample-app-dev-2 --refresh >/dev/null; sleep 15
+for c in dev dev-2 prod; do
+  echo "== $c"; kubectl --context kind-$c -n sample-app get deploy sample-app \
+    -o jsonpath='{.spec.template.spec.containers[0].env[0].value}'; echo
+done
+== dev
+Hello from the data platform | cluster=dev env=dev
+== dev-2
+Hello from dev-2 (cluster-level override) | cluster=dev-2 env=dev
+== prod
+Hello from the data platform | cluster=prod env=prod

@@ -1,0 +1,15 @@
+== dev
+replicas=1
+PODINFO_UI_MESSAGE=Hello from the data platform | cluster=dev env=dev
+PODINFO_UI_COLOR=#2e8b57
+FEATURE_NEW_BANNER=true
+== dev-2
+replicas=1
+PODINFO_UI_MESSAGE=Hello from dev-2 (cluster-level override) | cluster=dev-2 env=dev
+PODINFO_UI_COLOR=#2e8b57
+FEATURE_NEW_BANNER=true
+== prod
+replicas=2
+PODINFO_UI_MESSAGE=Hello from the data platform | cluster=prod env=prod
+PODINFO_UI_COLOR=#34577c
+FEATURE_NEW_BANNER=false
