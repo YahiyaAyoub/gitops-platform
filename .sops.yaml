@@ -1,4 +1,11 @@
+# Each env's secrets are readable only by that env's cluster key + the admin key.
 creation_rules:
+  - path_regex: .*/secrets/dev\.enc\.ya?ml$
+    encrypted_regex: ^(data|stringData)$
+    age: age18fd0sxteh5ddq0xhmdew42qxlzx7ylmuchsqs0xvdd0twazh745sxh65gy,age1e2yjf2v46pkh46ud4ajnpy34cle22glnq36hzmmgphszu3r78ukq3l2s48
+  - path_regex: .*/secrets/prod\.enc\.ya?ml$
+    encrypted_regex: ^(data|stringData)$
+    age: age18fd0sxteh5ddq0xhmdew42qxlzx7ylmuchsqs0xvdd0twazh745sxh65gy,age10hrlhwa77c8kkcdpt0wucep7xyn30le68kzsak5uezzp9m8kpqxqt9w6s2
   - path_regex: .*\.enc\.ya?ml$
     encrypted_regex: ^(data|stringData)$
     age: age18fd0sxteh5ddq0xhmdew42qxlzx7ylmuchsqs0xvdd0twazh745sxh65gy
