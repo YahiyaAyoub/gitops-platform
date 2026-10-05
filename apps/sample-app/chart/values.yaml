@@ -1,0 +1,15 @@
+# Chart defaults (layer 0) — overridden by values/ layers
+replicaCount: 1
+image:
+  repository: ghcr.io/stefanprodan/podinfo
+  tag: "6.7.1"
+ui:
+  message: "Hello"
+  color: "#34577c"
+features:
+  newBanner: false
+clusterName: unknown
+env: unknown
+resources:
+  requests: { cpu: 50m, memory: 64Mi }
+  limits: { memory: 128Mi }

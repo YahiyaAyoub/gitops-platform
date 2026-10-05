@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels: { app: {{ .Release.Name }} }
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels: { app: {{ .Release.Name }} }
+  template:
+    metadata:
+      labels: { app: {{ .Release.Name }} }
+    spec:
+      containers:
+        - name: app
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - { name: http, containerPort: 9898 }
+          env:
+            - name: PODINFO_UI_MESSAGE
+              value: {{ printf "%s | cluster=%s env=%s" .Values.ui.message .Values.clusterName .Values.env | quote }}
+            - name: PODINFO_UI_COLOR
+              value: {{ .Values.ui.color | quote }}
+            - name: FEATURE_NEW_BANNER
+              value: {{ .Values.features.newBanner | quote }}
+          readinessProbe: { httpGet: { path: /readyz, port: http } }
+          livenessProbe:  { httpGet: { path: /healthz, port: http } }
+          resources: {{- toYaml .Values.resources | nindent 12 }}

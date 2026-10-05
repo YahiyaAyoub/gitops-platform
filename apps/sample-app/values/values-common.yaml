@@ -1,0 +1,4 @@
+# Layer 1 — settings common to ALL clusters
+replicaCount: 1
+ui:
+  message: "Hello from the data platform"

@@ -1,0 +1,25 @@
+# Task 1: one Application per cluster (deliberate copy-paste, replaced by ApplicationSet in Task 2)
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sample-app-dev
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/YahiyaAyoub/gitops-platform.git
+    targetRevision: main
+    path: apps/sample-app/chart
+    helm:
+      releaseName: sample-app
+      valueFiles:
+        - ../values/values-common.yaml
+      parameters:
+        - { name: clusterName, value: dev }
+        - { name: env, value: dev }
+  destination:
+    name: dev
+    namespace: sample-app
+  syncPolicy:
+    automated: { prune: true, selfHeal: true }
+    syncOptions: [CreateNamespace=true]
