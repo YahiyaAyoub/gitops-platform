@@ -1,0 +1,19 @@
+apiVersion: http.keda.sh/v1alpha1
+kind: HTTPScaledObject
+metadata:
+  name: scale-demo
+spec:
+  hosts: [scale-demo.local]
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: scale-demo
+    service: scale-demo
+    port: 80
+  replicas:
+    min: 0          # scale to zero when idle
+    max: 5          # cost guardrail: hard ceiling
+  scaledownPeriod: 60   # ~1 min without traffic -> 0
+  scalingMetric:
+    concurrency:
+      targetValue: 2    # >2 in-flight requests per pod -> add a pod

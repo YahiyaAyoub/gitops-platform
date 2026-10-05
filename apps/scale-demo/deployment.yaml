@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scale-demo
+  labels: { app: scale-demo }
+spec:
+  # No `replicas`: the KEDA HTTP add-on owns the replica count (0..5), so Argo CD never fights it.
+  selector:
+    matchLabels: { app: scale-demo }
+  template:
+    metadata:
+      labels: { app: scale-demo }
+    spec:
+      containers:
+        - name: app
+          image: ghcr.io/stefanprodan/podinfo:6.7.1
+          ports: [{ name: http, containerPort: 9898 }]
+          readinessProbe:
+            httpGet: { path: /readyz, port: http }
+            periodSeconds: 1            # faster "ready" = shorter cold start
+          resources:
+            requests: { cpu: 50m, memory: 32Mi }
+            limits: { memory: 64Mi }

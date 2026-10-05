@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: scale-demo
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  generators:
+    - clusters:
+        selector:
+          matchExpressions:
+            - { key: env, operator: In, values: [dev, prod] }
+  template:
+    metadata:
+      name: 'scale-demo-{{ .name }}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/YahiyaAyoub/gitops-platform.git
+        targetRevision: main
+        path: apps/scale-demo
+      destination:
+        name: '{{ .name }}'
+        namespace: scale-demo
+      syncPolicy:
+        automated: { prune: true, selfHeal: true }
+        syncOptions: [CreateNamespace=true]
