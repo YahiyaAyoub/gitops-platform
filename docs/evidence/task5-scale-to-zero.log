@@ -1,0 +1,32 @@
+[00:16:01] cluster=kind-dev  route: curl -> KEDA interceptor -> scale-demo
+[00:16:01] STEP 1: wait for idle scale-to-zero
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+scale-demo   0/0     0            0           17m
+No resources found in scale-demo namespace.
+[00:16:01] STEP 2: cold start - one request while at 0 replicas
+[00:16:01]   HTTP 200  cold-start latency 1.069172s
+[00:16:02] STEP 3: load test 45s, 20 concurrent, 1s handler (/delay/1)
+[00:16:02]   replicas=1 ready=1
+[00:16:07]   replicas=1 ready=1
+[00:16:13]   replicas=4 ready=1
+[00:16:18]   replicas=4 ready=4
+[00:16:23]   replicas=4 ready=4
+[00:16:28]   replicas=5 ready=4
+[00:16:33]   replicas=5 ready=5
+[00:16:38]   replicas=5 ready=5
+[00:16:44]   replicas=5 ready=5
+  Requests/sec:	19.8868
+  1.006 [721]	|■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  1.010 [135]	|■■■■■■■
+  [200]	900 responses
+[00:16:49] STEP 4: idle - wait for scale back to 0
+[00:16:49]   replicas=5 ready=5
+[00:16:59]   replicas=5 ready=5
+[00:17:09]   replicas=5 ready=5
+[00:17:20]   replicas=5 ready=5
+[00:17:30]   replicas=5 ready=5
+[00:17:40]   replicas=5 ready=5
+[00:17:50]   scaled back to zero
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+scale-demo   0/0     0            0           19m
+No resources found in scale-demo namespace.
