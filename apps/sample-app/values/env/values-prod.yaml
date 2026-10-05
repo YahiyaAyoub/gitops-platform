@@ -1,0 +1,2 @@
+# Layer 2 — env=prod overrides only
+replicaCount: 2

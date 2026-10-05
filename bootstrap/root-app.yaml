@@ -1,0 +1,17 @@
+# App-of-apps: every ApplicationSet in bootstrap/appsets/ is managed from git
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/YahiyaAyoub/gitops-platform.git
+    targetRevision: main
+    path: bootstrap/appsets
+  destination:
+    name: in-cluster
+    namespace: argocd
+  syncPolicy:
+    automated: { prune: true, selfHeal: true }

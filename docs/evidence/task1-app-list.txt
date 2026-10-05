@@ -1,0 +1,3 @@
+NAME                    CLUSTER  NAMESPACE   PROJECT  STATUS  HEALTH   SYNCPOLICY  CONDITIONS  REPO                                                PATH                   TARGET
+argocd/sample-app-dev   dev      sample-app  default  Synced  Healthy  Auto-Prune  <none>      https://github.com/YahiyaAyoub/gitops-platform.git  apps/sample-app/chart  main
+argocd/sample-app-prod  prod     sample-app  default  Synced  Healthy  Auto-Prune  <none>      https://github.com/YahiyaAyoub/gitops-platform.git  apps/sample-app/chart  main

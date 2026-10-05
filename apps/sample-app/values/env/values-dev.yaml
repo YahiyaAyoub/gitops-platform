@@ -1,0 +1,5 @@
+# Layer 2 — env=dev overrides only
+features:
+  newBanner: true
+ui:
+  color: "#2e8b57"
