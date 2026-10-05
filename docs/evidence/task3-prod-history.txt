@@ -1,0 +1,4 @@
+SOURCE  https://github.com/YahiyaAyoub/gitops-platform.git
+ID      DATE                           REVISION
+0       2026-10-05 13:42:03 +0400 +04  main (9d5738b)
+1       2026-10-05 14:39:33 +0400 +04  main (4b709a2)

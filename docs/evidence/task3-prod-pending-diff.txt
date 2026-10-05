@@ -1,0 +1,6 @@
+
+===== apps/Deployment sample-app/sample-app ======
+168c168
+<           value: Hello from the data platform | cluster=prod env=prod
+---
+>           value: Hello from the data platform - release v2 | cluster=prod env=prod
