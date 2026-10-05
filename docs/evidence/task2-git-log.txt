@@ -1,0 +1,3 @@
+9d5738b feat(task2): ApplicationSet + layered values, root app-of-apps
+4afea74 feat(task1): sample-app chart + per-cluster Applications
+39cbdac feat: argocd bootstrap values + declarative cluster registration

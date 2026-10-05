@@ -1,0 +1,3 @@
+# Layer 3 — only dev-2 differs: custom message
+ui:
+  message: "Hello from dev-2 (cluster-level override)"
