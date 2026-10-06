@@ -1,0 +1,7 @@
+Operation:          Sync
+Sync Revision:      da1f770356c09bea11a7b385b28f3a4a4582c845
+Phase:              Running
+Start:              2026-10-06 15:53:48 +0400 +04
+Finished:           2026-10-06 15:54:28 +0400 +04
+Duration:           40s
+Message:            one or more synchronization tasks completed unsuccessfully, reason: ConfigMap "Invalid_Name_For_Demo" is invalid: metadata.name: Invalid value: "Invalid_Name_For_Demo": a lowercase RFC 1123 subdomain must consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character (e.g. 'example.com', regex used for validation is '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*'). Retrying attempt #3 at 11:54AM.
