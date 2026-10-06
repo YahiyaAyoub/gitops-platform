@@ -25,6 +25,7 @@ spec:
         helm:
           releaseName: karpenter
           valuesObject:
+            serviceMonitor: { enabled: true }   # nodepool usage/limit metrics -> Prometheus
             controller:
               image: { repository: kind.local/kwok, tag: v1.14.1 }   # built with ko, loaded into kind
             settings:

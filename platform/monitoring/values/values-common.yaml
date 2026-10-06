@@ -12,17 +12,41 @@ prometheus:
     retention: 6h
     scrapeInterval: 15s
     evaluationInterval: 15s
-    # pick up ServiceMonitors / PodMonitors / PrometheusRules from ANY release (KEDA, Karpenter, our rules)
     serviceMonitorSelectorNilUsesHelmValues: false
     podMonitorSelectorNilUsesHelmValues: false
     ruleSelectorNilUsesHelmValues: false
     resources:
       requests: { cpu: 100m, memory: 300Mi }
       limits: { memory: 1Gi }
-alertmanager:
-  alertmanagerSpec:
-    resources:
-      requests: { cpu: 10m, memory: 48Mi }
 prometheusOperator:
   resources:
     requests: { cpu: 20m, memory: 64Mi }
+alertmanager:
+  alertmanagerSpec:
+    secrets: [alertmanager-slack]          # created by sops-secrets-operator from git (encrypted)
+    resources:
+      requests: { cpu: 10m, memory: 48Mi }
+  config:
+    global:
+      resolve_timeout: 5m
+      slack_api_url_file: /etc/alertmanager/secrets/alertmanager-slack/url
+    route:
+      receiver: slack
+      group_by: [alertname, cluster, namespace]
+      group_wait: 30s
+      group_interval: 1m
+      repeat_interval: 4h
+      routes:
+        - receiver: "null"
+          matchers: ['alertname=~"Watchdog|InfoInhibitor"']
+        - receiver: "null"
+          matchers: ['severity=~"info|none"']
+    receivers:
+      - name: "null"
+      - name: slack
+        slack_configs:
+          - send_resolved: true
+            title: '[{{ .Status | toUpper }}] {{ .CommonLabels.alertname }} | cluster={{ .CommonLabels.cluster }} env={{ .CommonLabels.env }}'
+            text: |-
+              {{ range .Alerts }}• *{{ .Labels.severity }}* {{ .Annotations.summary }} (cluster={{ .Labels.cluster }})
+              {{ end }}

@@ -1,0 +1,4 @@
+apiVersion: v2
+name: monitoring-config
+description: Platform PrometheusRules + SOPS-encrypted Alertmanager Slack webhook, per env
+version: 0.1.0
