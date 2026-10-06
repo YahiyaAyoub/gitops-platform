@@ -29,6 +29,13 @@ spec:
               image: { repository: kind.local/kwok, tag: v1.14.1 }   # built with ko, loaded into kind
             settings:
               preferencePolicy: Ignore
+              # Workaround: upstream kwok chart v1.14.1 templates 4 feature gates but its values.yaml
+              # only defines 2 -> "StaticCapacity=" (empty) -> controller panics. Pin all 4 explicitly.
+              featureGates:
+                staticCapacity: false
+                spotToSpotConsolidation: false
+                nodeRepair: false
+                capacityBuffer: false
       destination:
         name: '{{ .name }}'
         namespace: kube-system
