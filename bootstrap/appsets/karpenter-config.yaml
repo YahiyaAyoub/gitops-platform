@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: karpenter-config
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  generators:
+    - clusters:
+        selector:
+          matchLabels: { karpenter: enabled }
+  template:
+    metadata:
+      name: 'karpenter-config-{{ .name }}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/YahiyaAyoub/gitops-platform.git
+        targetRevision: main
+        path: platform/karpenter-config/chart
+        helm:
+          ignoreMissingValueFiles: true
+          valueFiles:
+            - ../values/values-common.yaml
+            - '../values/env/values-{{ index .metadata.labels "env" }}.yaml'
+            - '../values/clusters/values-{{ .name }}.yaml'
+      destination:
+        name: '{{ .name }}'
+        namespace: kube-system
+      syncPolicy:
+        automated: { prune: true, selfHeal: true }
+        retry: { limit: 5, backoff: { duration: 15s, factor: 2, maxDuration: 3m } }

@@ -1,0 +1,9 @@
+# Layer 0 defaults
+nodePool:
+  name: default
+  limits: { cpu: "50", memory: 200Gi }       # hard ceiling on total node capacity
+  allowedInstanceCPUs: ["2", "4"]            # guardrail: no oversized instances
+  capacityTypes: ["on-demand"]
+  consolidateAfter: 30s
+  disruptionBudgetNodes: "20%"               # never churn more than 20% of nodes at once
+  expireAfter: 720h

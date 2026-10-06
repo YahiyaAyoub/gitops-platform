@@ -1,0 +1,4 @@
+apiVersion: v2
+name: karpenter-config
+description: NodePool + KWOKNodeClass with cost guardrails, configured per cluster via value layers
+version: 0.1.0

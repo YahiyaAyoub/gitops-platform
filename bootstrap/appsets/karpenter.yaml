@@ -1,0 +1,38 @@
+# Karpenter (KWOK provider) only on clusters labelled karpenter=enabled
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: karpenter
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  generators:
+    - clusters:
+        selector:
+          matchLabels: { karpenter: enabled }
+  template:
+    metadata:
+      name: 'karpenter-{{ .name }}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/kubernetes-sigs/karpenter.git
+        targetRevision: v1.14.1           # chart + CRDs pinned to the same tag the image was built from
+        path: kwok/charts
+        helm:
+          releaseName: karpenter
+          valuesObject:
+            controller:
+              image: { repository: kind.local/kwok, tag: v1.14.1 }   # built with ko, loaded into kind
+            settings:
+              preferencePolicy: Ignore
+      destination:
+        name: '{{ .name }}'
+        namespace: kube-system
+      syncPolicy:
+        automated: { prune: true, selfHeal: true }
+        syncOptions: [ServerSideApply=true]
+        retry: { limit: 5, backoff: { duration: 10s, factor: 2, maxDuration: 3m } }

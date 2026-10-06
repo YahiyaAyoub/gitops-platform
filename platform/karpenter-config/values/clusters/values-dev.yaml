@@ -1,0 +1,3 @@
+# Layer 3 — this specific cluster: tightest CPU ceiling (demo: proves the limit stops provisioning)
+nodePool:
+  limits: { cpu: "10", memory: 40Gi }

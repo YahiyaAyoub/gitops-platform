@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: inflate
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - clusters:
+        selector:
+          matchLabels: { karpenter: enabled }
+  template:
+    metadata:
+      name: 'inflate-{{ .name }}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/YahiyaAyoub/gitops-platform.git
+        targetRevision: main
+        path: apps/inflate
+      destination:
+        name: '{{ .name }}'
+        namespace: inflate
+      syncPolicy:
+        automated: { prune: true, selfHeal: true }
+        syncOptions: [CreateNamespace=true]

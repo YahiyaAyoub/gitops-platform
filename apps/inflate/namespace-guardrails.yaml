@@ -1,0 +1,9 @@
+# Namespace-level cost guardrail: caps what this team can ever request
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: compute-quota
+spec:
+  hard:
+    requests.cpu: "24"
+    pods: "30"

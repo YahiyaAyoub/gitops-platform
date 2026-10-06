@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inflate
+spec:
+  # no `replicas`: scaled imperatively for the demo; Argo CD won't revert it
+  selector:
+    matchLabels: { app: inflate }
+  template:
+    metadata:
+      labels: { app: inflate }
+    spec:
+      terminationGracePeriodSeconds: 0
+      nodeSelector: { karpenter.sh/nodepool: default }
+      tolerations:
+        - { key: simulated, operator: Equal, value: "true", effect: NoSchedule }
+      containers:
+        - name: inflate
+          image: registry.k8s.io/pause:3.10
+          resources:
+            requests: { cpu: "1", memory: 512Mi }
