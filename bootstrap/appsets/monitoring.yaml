@@ -1,0 +1,45 @@
+# kube-prometheus-stack on every target cluster; cluster/env stamped on every alert via externalLabels
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: monitoring
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  generators:
+    - clusters:
+        selector:
+          matchExpressions:
+            - { key: env, operator: In, values: [dev, prod] }
+  template:
+    metadata:
+      name: 'monitoring-{{ .name }}'
+    spec:
+      project: default
+      sources:
+        - repoURL: https://prometheus-community.github.io/helm-charts
+          chart: kube-prometheus-stack
+          targetRevision: 91.9.0
+          helm:
+            releaseName: kps
+            ignoreMissingValueFiles: true
+            valueFiles:
+              - $values/platform/monitoring/values/values-common.yaml
+              - '$values/platform/monitoring/values/env/values-{{ index .metadata.labels "env" }}.yaml'
+              - '$values/platform/monitoring/values/clusters/values-{{ .name }}.yaml'
+            parameters:
+              - { name: 'prometheus.prometheusSpec.externalLabels.cluster', value: '{{ .name }}' }
+              - { name: 'prometheus.prometheusSpec.externalLabels.env', value: '{{ index .metadata.labels "env" }}' }
+        - repoURL: https://github.com/YahiyaAyoub/gitops-platform.git
+          targetRevision: main
+          ref: values
+      destination:
+        name: '{{ .name }}'
+        namespace: monitoring
+      syncPolicy:
+        automated: { prune: true, selfHeal: true }
+        syncOptions: [CreateNamespace=true, ServerSideApply=true]   # CRDs too large for client-side apply
+        retry: { limit: 5, backoff: { duration: 15s, factor: 2, maxDuration: 3m } }

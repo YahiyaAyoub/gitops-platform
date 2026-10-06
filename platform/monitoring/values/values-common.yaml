@@ -1,0 +1,28 @@
+# kube-prometheus-stack — common to every target cluster (lean for kind)
+crds:
+  enabled: true
+grafana:
+  enabled: false
+kubeEtcd: { enabled: false }               # not reachable on kind -> would alert forever
+kubeScheduler: { enabled: false }
+kubeControllerManager: { enabled: false }
+kubeProxy: { enabled: false }
+prometheus:
+  prometheusSpec:
+    retention: 6h
+    scrapeInterval: 15s
+    evaluationInterval: 15s
+    # pick up ServiceMonitors / PodMonitors / PrometheusRules from ANY release (KEDA, Karpenter, our rules)
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    ruleSelectorNilUsesHelmValues: false
+    resources:
+      requests: { cpu: 100m, memory: 300Mi }
+      limits: { memory: 1Gi }
+alertmanager:
+  alertmanagerSpec:
+    resources:
+      requests: { cpu: 10m, memory: 48Mi }
+prometheusOperator:
+  resources:
+    requests: { cpu: 20m, memory: 64Mi }
