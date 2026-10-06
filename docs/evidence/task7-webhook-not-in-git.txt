@@ -1,0 +1,1 @@
+slack webhook plaintext occurrences in history: 0
