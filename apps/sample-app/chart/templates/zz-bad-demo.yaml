@@ -1,8 +1,0 @@
-{{- if eq .Values.env "dev" }}
-# DELIBERATELY BROKEN (Task 8 demo): uppercase/underscore names are invalid -> API server rejects -> sync fails
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: Invalid_Name_For_Demo
-data: { demo: "bad manifest" }
-{{- end }}
