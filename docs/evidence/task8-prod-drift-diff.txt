@@ -1,0 +1,6 @@
+
+===== apps/Deployment sample-app/sample-app ======
+163c163
+<   replicas: 5
+---
+>   replicas: 2
