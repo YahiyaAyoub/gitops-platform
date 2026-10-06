@@ -6,3 +6,9 @@ configs:
     timeout.reconciliation: 60s    # faster drift detection for demos (default 180s)
 dex:
   enabled: false
+notifications:
+  enabled: true
+  cm:
+    create: false      # argocd-notifications-cm is managed from git (platform/hub-notifications)
+  secret:
+    create: false      # argocd-notifications-secret comes from a SopsSecret (encrypted in git)

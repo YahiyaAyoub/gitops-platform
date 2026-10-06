@@ -6,6 +6,9 @@ creation_rules:
   - path_regex: .*/secrets/prod\.enc\.ya?ml$
     encrypted_regex: ^(data|stringData)$
     age: age18fd0sxteh5ddq0xhmdew42qxlzx7ylmuchsqs0xvdd0twazh745sxh65gy,age10hrlhwa77c8kkcdpt0wucep7xyn30le68kzsak5uezzp9m8kpqxqt9w6s2
+  - path_regex: .*/secrets/hub\.enc\.ya?ml$
+    encrypted_regex: ^(data|stringData)$
+    age: age18fd0sxteh5ddq0xhmdew42qxlzx7ylmuchsqs0xvdd0twazh745sxh65gy,age1xh9ac3qd8dt670p3dzgxwjgw2fx895ge0zeehc3ls000t4ewcp7scmssha
   - path_regex: .*\.enc\.ya?ml$
     encrypted_regex: ^(data|stringData)$
     age: age18fd0sxteh5ddq0xhmdew42qxlzx7ylmuchsqs0xvdd0twazh745sxh65gy

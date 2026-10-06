@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-notifications-cm
+data:
+  context: |
+    argocdUrl: http://localhost:8080
+
+  # Slack incoming webhook via the generic webhook service; URL comes from the SOPS-managed secret
+  service.webhook.slack-webhook: |
+    url: $slack-webhook-url
+    headers:
+      - name: Content-Type
+        value: application/json
+
+  template.app-sync-failed: |
+    webhook:
+      slack-webhook:
+        method: POST
+        body: |
+          {"text": {{ printf ":red_circle: *[Argo CD] SYNC FAILED* app=`%s` cluster=`%s` revision=`%.7s`\n> %s" .app.metadata.name .app.spec.destination.name .app.status.sync.revision .app.status.operationState.message | toJson }}}
+
+  template.app-drift-detected: |
+    webhook:
+      slack-webhook:
+        method: POST
+        body: |
+          {"text": {{ printf ":large_orange_circle: *[Argo CD] OUT OF SYNC* app=`%s` cluster=`%s`: live state differs from git `%.7s` (drift or pending promotion)" .app.metadata.name .app.spec.destination.name .app.status.sync.revision | toJson }}}
+
+  trigger.on-sync-failed: |
+    - description: Sync operation failed
+      when: app.status.operationState != nil and app.status.operationState.phase in ['Error', 'Failed']
+      oncePer: app.status.sync.revision
+      send: [app-sync-failed]
+
+  trigger.on-drift-detected: |
+    - description: Live state differs from git
+      when: app.status.sync.status == 'OutOfSync'
+      send: [app-drift-detected]
+
+  # Global subscriptions: no per-app annotations needed
+  subscriptions: |
+    - recipients: [slack-webhook]
+      triggers: [on-sync-failed]
+    - recipients: [slack-webhook]
+      triggers: [on-drift-detected]
+      selector: env=prod          # dev self-heals drift in seconds; prod (manual gate) pages
