@@ -1,0 +1,20 @@
+Name:               argocd/karpenter-config-dev
+Project:            default
+Server:             dev
+Namespace:          kube-system
+URL:                https://argocd.example.com/applications/karpenter-config-dev
+Source:
+- Repo:             https://github.com/YahiyaAyoub/gitops-platform.git
+  Target:           main
+  Path:             platform/karpenter-config/chart
+  Helm Values:      ../values/values-common.yaml,../values/env/values-dev.yaml,../values/clusters/values-dev.yaml
+SyncWindow:         Sync Allowed
+Sync Policy:        Automated (Prune)
+Sync Status:        Synced to main (d1fd585)
+Health Status:      Healthy
+
+GROUP              KIND           NAMESPACE    NAME     STATUS   HEALTH   HOOK  MESSAGE
+karpenter.sh       NodePool       kube-system  default  Running  Synced         nodepool.karpenter.sh/default created
+karpenter.kwok.sh  KWOKNodeClass  kube-system  default  Running  Synced         kwoknodeclass.karpenter.kwok.sh/default created
+karpenter.kwok.sh  KWOKNodeClass               default  Synced                  
+karpenter.sh       NodePool                    default  Synced   Healthy        

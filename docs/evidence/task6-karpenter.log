@@ -1,0 +1,41 @@
+[10:54:47] --- BASELINE
+  NodePool limit cpu=10 | provisioned cpu=1100m | nodes=1
+  node: kwok-default-mf5rn-marevolcano-1-7u7zoq1bet-1080494424 c-2x-amd64-linux
+  inflate pods: 1 Running
+[10:54:47] STEP 1: scale inflate -> 6 replicas (1 CPU each): expect new nodes
+[10:55:32] --- after scale-up
+  NodePool limit cpu=10 | provisioned cpu=6400m | nodes=4
+  node: kwok-default-46wrq-pantherpinto-3-vdig9gwmnh-3438796614 c-2x-amd64-linux
+  node: kwok-default-mf5rn-marevolcano-1-7u7zoq1bet-1080494424 c-2x-amd64-linux
+  node: kwok-default-qzktb-shirtgarnet-4-ewdhxgmcyg-3758413733 c-2x-amd64-linux
+  node: kwok-default-twm9x-hissercoral-2-dpuhseki9i-3782494843 c-4x-amd64-linux
+  inflate pods: 6 Running
+[10:55:33] STEP 2: scale inflate -> 20 replicas: demand exceeds NodePool cpu limit (10)
+[10:56:33] --- at the limit
+  NodePool limit cpu=10 | provisioned cpu=8600m | nodes=6
+  node: kwok-default-46wrq-pantherpinto-3-vdig9gwmnh-3438796614 c-2x-amd64-linux
+  node: kwok-default-jmnr8-lordproud-5-cglln5plsa-4057128595 c-2x-amd64-linux
+  node: kwok-default-mf5rn-marevolcano-1-7u7zoq1bet-1080494424 c-2x-amd64-linux
+  node: kwok-default-qzktb-shirtgarnet-4-ewdhxgmcyg-3758413733 c-2x-amd64-linux
+  node: kwok-default-twm9x-hissercoral-2-dpuhseki9i-3782494843 c-4x-amd64-linux
+  node: kwok-default-v6c4b-llamaseason-6-r42aezbgfb-3291161045 c-2x-amd64-linux
+  inflate pods: 12 Pending 8 Running
+  Karpenter refusing to exceed the limit:
+    {"level":"ERROR","time":"2026-10-06T06:56:28.427Z","logger":"controller","message":"could not schedule pod","commit":"6e7eab7","controller":"provisioner","namespace":"","name":"","reconcileID":"292d79fc-d408-4a0d-b6fb-a1
+    {"level":"ERROR","time":"2026-10-06T06:56:28.427Z","logger":"controller","message":"could not schedule pod","commit":"6e7eab7","controller":"provisioner","namespace":"","name":"","reconcileID":"292d79fc-d408-4a0d-b6fb-a1
+    60s         Warning   FailedScheduling   pod/inflate-754b6858b9-zn22v   Failed to schedule pod, all available instance types exceed limits for nodepool (NodePool=default)
+    56s         Warning   FailedScheduling   pod/inflate-754b6858b9-x9d5n   Failed to schedule pod, all available instance types exceed limits for nodepool (NodePool=default)
+[10:56:34] STEP 3: scale inflate -> 0: expect empty nodes consolidated away (budget: 20% of nodes at a time)
+[10:56:49]   karpenter nodes=6
+[10:57:04]   karpenter nodes=4
+[10:57:20]   karpenter nodes=4
+[10:57:35]   karpenter nodes=3
+[10:57:51]   karpenter nodes=2
+[10:58:06]   karpenter nodes=2
+[10:58:21]   karpenter nodes=1
+[10:58:37]   karpenter nodes=1
+[10:58:52]   karpenter nodes=0
+[10:58:52] --- FINAL
+  NodePool limit cpu=10 | provisioned cpu=0 | nodes=0
+  node: No found
+  inflate pods: 
